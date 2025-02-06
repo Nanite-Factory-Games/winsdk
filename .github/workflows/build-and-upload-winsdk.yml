@@ -23,11 +23,11 @@ jobs:
     - name: Make folders for archive
       run: mkdir C:\include && mkdir C:\lib
 
-    - name: Copy files to folderspowe
+    - name: Copy files to folders
       run: (copy "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\" "C:\include\") && (copy "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um" "C:\lib\")
     
     - name: Create archive for sdk
-      run: Compress-Archive -Path "C:\:include", "C:\lib" -DestinationPath "C:\winsdk.zip"
+      run: Compress-Archive -Path "C:\include", "C:\lib" -DestinationPath "C:\winsdk.zip"
 
     - name: create release
       id: create_release
