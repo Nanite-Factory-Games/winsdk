@@ -11,7 +11,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
     - name: create release
       id: create_release
       uses: actions/create-release@master
