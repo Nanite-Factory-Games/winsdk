@@ -26,10 +26,10 @@ jobs:
         prerelease: false   
     
     - name: Download SDK installer
-      run: curl -SL --output sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
+      run: curl -SL --output C:\sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
 
     - name: Install SDK
-      run: sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
+      run: C:\sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit /quiet
     
     - name: Copy and zip windows SDK files
       run: mkdir include && mkdir lib && (cp "C:\Program Files (x86)\Windows Kits\8.1\Include\um" include\) && (cp "C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um" lib\) && Compress-Archive -Path "include", "lib" -DestinationPath "C:\winsdk.zip"
