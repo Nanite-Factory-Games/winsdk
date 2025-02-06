@@ -14,6 +14,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     
+    - name: Download SDK installer
+      run: curl -SL --output C:\sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
+
+    - name: Install SDK
+      run: C:\sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit
+    
+    - name: Make folders for archive
+      run: mkdir C:\include && mkdir C:\lib
+
+    - name: Copy files to folderspowe
+      run: (copy "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\" "C:\include\") && (copy "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um" "C:\lib\")
+    
+    - name: Create archive for sdk
+      run: Compress-Archive -Path "C:\:include", "C:\lib" -DestinationPath "C:\winsdk.zip"
+
     - name: create release
       id: create_release
       uses: actions/create-release@master
@@ -24,15 +39,6 @@ jobs:
         release_name: Windows SDK 10
         draft: false
         prerelease: false   
-    
-    - name: Download SDK installer
-      run: curl -SL --output C:\sdksetup.exe https://go.microsoft.com/fwlink/p/?LinkId=323507
-
-    - name: Install SDK
-      run: C:\sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit
-    
-    - name: Make folders for archive
-      run: mkdir C:\include && mkdir C:\lib && (copy "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\" "C:\include\") && (copy "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um" "C:\lib\") && Compress-Archive -Path "C:\:include", "C:\lib" -DestinationPath "C:\winsdk.zip"
 
     - name: upload windows 10 sdk
       id: upload-windows-10
