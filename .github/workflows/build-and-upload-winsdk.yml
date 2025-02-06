@@ -34,8 +34,8 @@ jobs:
     - name: Copy and zip windows SDK files
       run: mkdir include && mkdir lib && (cp "C:\Program Files (x86)\Windows Kits\8.1\Include\um" include\) && (cp "C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um" lib\) && Compress-Archive -Path "include", "lib" -DestinationPath "C:\winsdk.zip"
 
-    - name: upload windows 8.1 sdk
-      id: upload-windows-8.1
+    - name: upload windows 8-1 sdk
+      id: upload-windows-8-1
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
