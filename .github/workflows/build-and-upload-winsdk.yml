@@ -32,7 +32,7 @@ jobs:
       run: C:\sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit
     
     - name: Copy and zip windows SDK files
-      run: (ls "C:\Program Files (x86)\Windows Kits\10") && mkdir include && mkdir lib && (cp "C:\Program Files (x86)\Windows Kits\10\Include\um" include\) && (cp "C:\Program Files (x86)\Windows Kits\10\Lib\winv6.3\um" lib\) && Compress-Archive -Path "include", "lib" -DestinationPath "C:\winsdk.zip"
+      run: (ls "C:\Program Files (x86)\Windows Kits\10\Include") && mkdir include && mkdir lib && (cp "C:\Program Files (x86)\Windows Kits\10\Include\um" include\) && (cp "C:\Program Files (x86)\Windows Kits\10\Lib\winv6.3\um" lib\) && Compress-Archive -Path "include", "lib" -DestinationPath "C:\winsdk.zip"
 
     - name: upload windows 10 sdk
       id: upload-windows-10
