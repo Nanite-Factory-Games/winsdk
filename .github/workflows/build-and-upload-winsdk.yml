@@ -21,16 +21,26 @@ jobs:
       run: C:\sdksetup.exe /features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.NetFxSoftwareDevelopmentKit
     
     - name: Make folders for archive
-      run: mkdir C:\include && mkdir C:\lib
+      run: mkdir C:\sdk\include && mkdir C:\sdk\lib
 
     - name: Copy lib files
-      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\*" -Destination "C:\lib" -Recurse -Force -ErrorAction Continue
+      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\*" -Destination "C:\sdk\lib" -Recurse -Force -ErrorAction Continue
 
     - name: Copy include files
-      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\*" -Destination "C:\include" -Recurse -Force -ErrorAction Continue
+      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\*" -Destination "C:\sdk\include" -Recurse -Force -ErrorAction Continue
+
+    - name: Convert filenames to lowercase for linux compatability
+      run: |
+          Set-Location C:\sdk
+          Get-ChildItem -Recurse -File | ForEach-Object {
+            $newName = $_.Name.ToLower()
+            if ($_.Name -ne $newName) {
+              Rename-Item $_.FullName -NewName $newName
+            }
+          }
 
     - name: Create archive for sdk
-      run: Compress-Archive -Path "C:\include", "C:\lib" -DestinationPath "C:\winsdk.zip"
+      run: Compress-Archive -Path "C:\sdk\include", "C:\sdk\lib" -DestinationPath "C:\winsdk.zip"
 
     - name: create release
       id: create_release
