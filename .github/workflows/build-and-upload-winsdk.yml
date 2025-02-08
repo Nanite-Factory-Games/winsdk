@@ -31,12 +31,11 @@ jobs:
 
     - name: Convert filenames to lowercase for linux compatability
       run: |
-          Set-Location C:\sdk
-          Get-ChildItem -Recurse -File | ForEach-Object {
-            $newName = $_.Name.ToLower()
-            if ($_.Name -ne $newName) {
-              Rename-Item $_.FullName -NewName $newName
-            }
+          Get-ChildItem -Path C:\sdk -Recurse -File | ForEach-Object {
+              $newName = $_.Name.ToLower()
+              if ($_.Name -ne $newName) {
+                  Rename-Item -Path $_.FullName -NewName $newName
+              }
           }
 
     - name: Create archive for sdk
