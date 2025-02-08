@@ -29,15 +29,6 @@ jobs:
     - name: Copy include files
       run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\*" -Destination "C:\sdk\include" -Recurse -Force -ErrorAction Continue
 
-    - name: Convert filenames to lowercase for linux compatability
-      run: |
-          Get-ChildItem -Path C:\sdk -Recurse -File | ForEach-Object {
-              $newName = $_.Name.ToLower()
-              if ($_.Name -ne $newName) {
-                  Rename-Item -Path $_.FullName -NewName $newName
-              }
-          }
-
     - name: Create archive for sdk
       run: Compress-Archive -Path "C:\sdk\include", "C:\sdk\lib" -DestinationPath "C:\winsdk.zip"
 
