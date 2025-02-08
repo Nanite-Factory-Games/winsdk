@@ -24,10 +24,10 @@ jobs:
       run: mkdir C:\include && mkdir C:\lib
 
     - name: Copy lib files
-      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\um\*" -Destination "C:\lib" -Recurse -Force -ErrorAction Continue
+      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0\*" -Destination "C:\lib" -Recurse -Force -ErrorAction Continue
 
     - name: Copy include files
-      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\*" -Destination "C:\include" -Recurse -Force -ErrorAction Continue
+      run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\*" -Destination "C:\include" -Recurse -Force -ErrorAction Continue
 
     - name: Create archive for sdk
       run: Compress-Archive -Path "C:\include", "C:\lib" -DestinationPath "C:\winsdk.zip"
