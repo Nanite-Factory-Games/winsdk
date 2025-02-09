@@ -29,10 +29,28 @@ jobs:
     - name: Copy include files
       run:  Copy-Item -Path "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\*" -Destination "C:\sdk\include" -Recurse -Force -ErrorAction Continue
 
+    - name: Create archive for unmodified sdk
+      run: Compress-Archive -Path "C:\sdk\include", "C:\sdk\lib" -DestinationPath "C:\winsdk_unmodified.zip"
+
     - name: Convert filenames to lowercase for linux compatability
       run: Get-ChildItem -r C:/sdk | Where {!$_.PSIsContainer} | Rename-Item -NewName {$_.FullName.ToLower()}
 
-    - name: Create archive for sdk
+    - name: Flatten includes folder
+      run: Get-ChildItem -Path "C:\winsdk\include" -Recurse -File | Move-Item -Destination "C:\winsdk\unclude" -Force
+
+    - name: Flatten libs filer
+      run: |
+        $basePath = "C:\sdk\lib"
+
+        Get-ChildItem -Path $basePath -Directory | ForEach-Object {
+            Get-ChildItem -Path $_.FullName -Directory | ForEach-Object {
+                $newPath = Join-Path -Path $basePath -ChildPath $_.Name
+                Move-Item -Path $_.FullName -Destination $newPath -Force
+            }
+            Remove-Item -Path $_.FullName -Force -Recurse
+        }
+    
+    - name: Create archive for modified sdk
       run: Compress-Archive -Path "C:\sdk\include", "C:\sdk\lib" -DestinationPath "C:\winsdk.zip"
 
     - name: create release
@@ -46,6 +64,17 @@ jobs:
         draft: false
         prerelease: false   
 
+    - name: upload unmodified windows 10 sdk
+      id: upload-windows-10-unmodified
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: C:\winsdk_unmodified.zip
+        asset_name: winsdk_unmodified.zip
+        asset_content_type: application/zip
+    
     - name: upload windows 10 sdk
       id: upload-windows-10
       uses: actions/upload-release-asset@v1
