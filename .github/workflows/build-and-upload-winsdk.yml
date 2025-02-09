@@ -36,7 +36,7 @@ jobs:
       run: Get-ChildItem -r C:/sdk | Where {!$_.PSIsContainer} | Rename-Item -NewName {$_.FullName.ToLower()}
 
     - name: Flatten includes folder
-      run: Get-ChildItem -Path "C:\winsdk\include" -Recurse -File | Move-Item -Destination "C:\winsdk\unclude" -Force
+      run: Get-ChildItem -Path "C:\sdk\include" -Recurse -File | Move-Item -Destination "C:\sdk\unclude" -Force
 
     - name: Flatten libs filer
       run: |
